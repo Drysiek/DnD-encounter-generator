@@ -1,12 +1,13 @@
 import os
 import tkinter
 from tkinter import *
+from tkinter import messagebox, filedialog
 import tkinter as tk
 import random
 # from tkinter import messagebox, filedialog
 # from Controller import Controller
-# import datetime as dt
 # from configparser import ConfigParser
+
 
 
 class app:
@@ -23,6 +24,8 @@ class app:
         self.encounter = tk.Frame(self.window)      # frame for encounter text and buttons for managing it
         self.add_encounter()
 
+        # self.encounters = None pass
+
         self.window.mainloop()
 
     def load_encounter(self):
@@ -31,6 +34,9 @@ class app:
         print(self.day_variable.get())
         print(self.type_variable.get())
         print(self.level_variable.get())
+
+        # pass self.encounters.get(self.place_variable.get(), self.season_variable.get(), self.day_variable.get(),
+        # self.type_variable.get(), self.level_variable.get())
 
     def add_choices(self):
         # labels informing what data is needed
@@ -205,8 +211,22 @@ class app:
         pass
 
     def new_idea(self):
+        # loading data
+        place = self.place_variable.get()
+        season = self.season_variable.get()
+        part_of_the_day = self.day_variable.get()
+        encounter_type = self.type_variable.get()
+        level = self.level_variable.get()
+        encounter_text = self.encounter_space.get()
 
-        pass
+        if encounter_type == 'Random':
+            messagebox.showinfo('Error', 'You can\'t use "Random" type while saving new encounter')
+        elif encounter_text == '':
+            messagebox.showinfo('Error', 'You can\'t use save new encounter without any text')
+        else:
+            file = open("pass", "a")
+            file.write()
+            file.close()
 
     def add_encounter(self):
         # needed for self.show_original()
@@ -215,7 +235,7 @@ class app:
         # place for random encounter text
         self.encounter_space = tk.Entry(self.encounter)
         self.encounter_space.grid(row=0, column=0, rowspan=3)
-        self.encounter_space.configure(width=50)
+        self.encounter_space.configure(width=70)
 
         button = tk.Button(self.encounter, command=self.show_original, text='Show original encounter')
         button.grid(row=0, column=1)
