@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import messagebox, filedialog
 import tkinter as tk
 import random
+from EncounterGenerator import Generator
 # from tkinter import messagebox, filedialog
 # from Controller import Controller
 # from configparser import ConfigParser
@@ -39,7 +40,7 @@ class app:
         self.encounter_space = tk.Entry(self.encounter)
         self.add_encounter()
 
-        # self.encounters = None pass
+        self.encounters = Generator()
 
         self.window.mainloop()
 
@@ -75,14 +76,11 @@ class app:
         menubar.add_cascade(label="File", menu=fileMenu, underline=0)
 
     def load_encounter(self):
-        print(self.place_variable.get())
-        print(self.season_variable.get())
-        print(self.day_variable.get())
-        print(self.type_variable.get())
-        print(self.level_variable.get())
-
-        # pass self.encounters.get(self.place_variable.get(), self.season_variable.get(), self.day_variable.get(),
-        # self.type_variable.get(), self.level_variable.get())
+        self.encounter_text = self.encounters.getEncounter(self.place_variable.get(), self.season_variable.get(),
+                                                           self.day_variable.get(), self.type_variable.get(),
+                                                           self.level_variable.get())
+        self.encounter_space.delete(0, tk.END)
+        self.encounter_space.insert(0, self.encounter_text)
 
     def add_choices(self):
         # labels informing what data is needed
@@ -102,11 +100,11 @@ class app:
         label.grid(row=4, column=0)
 
         # arrays of values available for OptionMenus
-        PLACE = ['Arctic', 'Costal', 'Desert', 'Forest', 'Grassland', 'Hill', 'Mountain', 'Ocean', 'Swamp',
+        PLACE = ['Arctic', 'Coastal', 'Desert', 'Forest', 'Grassland', 'Hill', 'Mountain', 'Ocean', 'Swamp',
                  'Town', 'Underdark', 'Underwater']
         SEASON = ['Spring', 'Summer', 'Fall', 'Winter']
         PART_OF_THE_DAY = ['Morning', 'Afternoon', 'Evening', 'Night']
-        ENCOUNTER_TYPE = ['Fight', 'Gathering resources', 'Meeting', 'Hunting', 'Quest', 'Puzzle', 'Random']
+        ENCOUNTER_TYPE = ['Fight', 'Gathering resources', 'Meeting', 'Hunting', 'Random']
 
         # variables needed in self.load_encounter()
         # self.place_variable = StringVar()
@@ -173,9 +171,6 @@ class app:
         self.format_dice_rolled()
 
     def roll_d20(self):
-        # temp = int(self.result["text"])
-        # temp+=random.randint(1, 20)
-        # self.result["text"]=str(temp)
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 20))
         self.dices_rolled_array[5] += 1
         self.format_dice_rolled()
@@ -250,7 +245,7 @@ class app:
         self.encounter_space.insert(0, self.encounter_text)
 
     def save_to_file(self):
-        if self.log_path=='':
+        if self.log_path == '':
             self.file_new()
         self.log_path.write(self.encounter_space.get())
 
@@ -274,6 +269,7 @@ class app:
 
     def add_encounter(self):
         # place for random encounter text
+        # self.encounter_space.place(x=0, y=0, width=200, height=30)
         self.encounter_space.grid(row=0, column=0, rowspan=3)
         self.encounter_space.configure(width=70)
 
