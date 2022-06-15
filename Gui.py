@@ -44,6 +44,7 @@ class app:
         self.add_dices()
 
         self.log_path = ''                          # path to file with logs
+        self.log_file = ''
 
         self.encounter = tk.Frame(self.window)      # frame for encounter text and buttons for managing it
         self.encounter_place = tk.Text(self.encounter)
@@ -59,10 +60,10 @@ class app:
         while True:
             try:
                 my_filetypes = [('text files', '.txt')]
-                answer = filedialog.askopenfilename(parent=self.window, initialdir=os.getcwd(),
-                                                    title="Choose a file to save your encounters:",
-                                                    filetypes=my_filetypes)
-                self.log_path = open(answer, 'a')
+                self.log_path = filedialog.askopenfilename(parent=self.window, initialdir=os.getcwd(),
+                                                           title="Choose a file to save your encounters:",
+                                                           filetypes=my_filetypes)
+                self.log_file = open(self.log_path, 'a')
                 break
             except FileNotFoundError:
                 messagebox.showinfo('No destination file chosen',
@@ -298,7 +299,6 @@ class app:
             else:
                 roll = random.randint(1, 100)
             self.last_roll[i] = (dice, roll)
-            # print(roll)
             self.result['text'] = str(int(self.result['text']) + roll)
 
     def unroll_last_roll(self):
@@ -396,13 +396,16 @@ class app:
         self.encounter_place.insert(1.0, self.encounter_text)
 
     def save_to_file(self):
+        if str(self.encounter_place.get("1.0", END)) == 'Here will be written the generated encounter':
+            print('jest zgodne')
         if self.log_path == '':
             self.file_new(None)
 
         if self.log_path != '':
-            print('doszlo')
-            self.log_path.write(f'{self.encounter_place.get("1.0", END)}\n')
-            self.log_path.write('-----------------------------\n')
+            self.log_file = open(self.log_path, 'a')
+            self.log_file.write(self.encounter_place.get("1.0", END))
+            self.log_file.write('\n-----------------------------\n')
+            self.log_file.close()
 
     def add_encounter(self):
         # place for random encounter text
