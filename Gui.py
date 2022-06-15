@@ -29,11 +29,14 @@ class app:
         self.modifier_frame = tk.Frame(self.dices)
         self.modifier_label = tk.Label(self.modifier_frame, text='Roll modifier:')
         self.modifier = 0
-        self.modifier_entry = tk.Entry(self.modifier_frame)
-        self.dices_rolled = tk.Label(self.dices, text='')
+        self.modifier_string = StringVar()
+        self.modifier_string.set('0')
+        self.modifier_string.trace_add('write', self.check_modifier)
+        self.modifier_entry = tk.Entry(self.modifier_frame, textvariable=self.modifier_string)
+        self.result_frame = tk.Frame(self.dices)
+        self.dices_rolled = tk.Label(self.result_frame, text='')
         self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.last_roll = list()
-        self.result_frame = tk.Frame(self.dices)
         self.result_label = tk.Label(self.result_frame, text='Rolled value:')
         self.result = tk.Label(self.result_frame, text='0')
         self.dice_management_button_frame = tk.Frame(self.dices)
@@ -53,7 +56,7 @@ class app:
         self.window.resizable(False, False)
         self.window.mainloop()
 
-    def file_new(self, situation):
+    def file_new(self, *args):
         while True:
             try:
                 my_filetypes = [('text files', '.txt')]
@@ -68,7 +71,7 @@ class app:
                                     'Encounter text could not have been saved\nPlease chose file to save encounters')
                 break
 
-    def change_dices_to_black(self, situation):
+    def change_dices_to_black(self, *args):
         self.dices_images.clear()
         for image, i in (
                 ('images/black/d2.gif', 0),
@@ -84,7 +87,7 @@ class app:
             self.dices_images.append(image)
             self.dice_buttons[i].configure(image=self.dices_images[i])
 
-    def change_dices_to_crystal(self, situation):
+    def change_dices_to_crystal(self, *args):
         self.dices_images.clear()
         for image, i in (
                 ('images/crystal/d2.gif', 0),
@@ -100,7 +103,7 @@ class app:
             self.dices_images.append(image)
             self.dice_buttons[i].configure(image=self.dices_images[i])
 
-    def change_dices_to_metal(self, situation):
+    def change_dices_to_metal(self, *args):
         self.dices_images.clear()
         for image, i in (
                 ('images/metal/d2.gif', 0),
@@ -199,104 +202,102 @@ class app:
 
         self.choices.grid(row=0, column=0, sticky=tkinter.NSEW)
 
-    def check_modifier(self):
+    def check_modifier(self, *args):
         entry = self.modifier_entry.get()
         if entry.isnumeric() or entry == '' or (entry[0] == '-' and entry[1:].isnumeric()):
-            new_modifier = 0
-            if entry != '':
-                new_modifier = int(entry)
-            if self.modifier != new_modifier:
-                difference = new_modifier - self.modifier
-                self.modifier = new_modifier
-                return difference
+            self.result['text'] = str(int(self.result['text']) - self.modifier)
+            if entry == '':
+                self.modifier = 0
             else:
-                return 0
+                self.modifier = int(entry)
+            self.result['text'] = str(int(self.result['text']) + self.modifier)
+        elif entry == '-':
+            pass
         else:
             messagebox.showinfo('Written modifier is improper',
                                 'Please write modifier that is a number')
-            return 0
 
-    def get_modifier(self):
-        entry = self.modifier_entry.get()
-        if entry.isnumeric() or entry == '' or (entry[0] == '-' and entry[1:].isnumeric()):
-            new_modifier = 0
-            if entry != '':
-                new_modifier = int(entry)
-            if self.modifier != new_modifier:
-                difference = new_modifier - self.modifier
-                self.modifier = new_modifier
-                return new_modifier
-            else:
-                return self.modifier
-        else:
-            messagebox.showinfo('Written modifier is improper',
-                                'Please write modifier that is a number')
-            return self.modifier
+    # def get_modifier(self):
+    #     entry = self.modifier_entry.get()
+    #     if entry.isnumeric() or entry == '' or (entry[0] == '-' and entry[1:].isnumeric()):
+    #         new_modifier = 0
+    #         if entry != '':
+    #             new_modifier = int(entry)
+    #         if self.modifier != new_modifier:
+    #             difference = new_modifier - self.modifier
+    #             self.modifier = new_modifier
+    #             return new_modifier
+    #         else:
+    #             return self.modifier
+    #     else:
+    #         messagebox.showinfo('Written modifier is improper',
+    #                             'Please write modifier that is a number')
+    #         return self.modifier
 
     def roll_d2(self):
         rolled = random.randint(1, 2)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((0, rolled))
         self.dices_rolled_array[0] += 1
         self.format_dice_rolled()
 
     def roll_d4(self):
         rolled = random.randint(1, 4)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((1, rolled))
         self.dices_rolled_array[1] += 1
         self.format_dice_rolled()
 
     def roll_d6(self):
         rolled = random.randint(1, 6)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((2, rolled))
         self.dices_rolled_array[2] += 1
         self.format_dice_rolled()
 
     def roll_d8(self):
         rolled = random.randint(1, 8)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((3, rolled))
         self.dices_rolled_array[3] += 1
         self.format_dice_rolled()
 
     def roll_d10(self):
         rolled = random.randint(1, 10)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((4, rolled))
         self.dices_rolled_array[4] += 1
         self.format_dice_rolled()
 
     def roll_d12(self):
         rolled = random.randint(1, 12)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((5, rolled))
         self.dices_rolled_array[5] += 1
         self.format_dice_rolled()
 
     def roll_d20(self):
         rolled = random.randint(1, 20)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((6, rolled))
         self.dices_rolled_array[6] += 1
         self.format_dice_rolled()
 
     def roll_d100(self):
         rolled = random.randint(1, 100)
-        self.result['text'] = str(int(self.result['text']) + rolled + self.check_modifier())
+        self.result['text'] = str(int(self.result['text']) + rolled)
         self.last_roll.append((7, rolled))
         self.dices_rolled_array[7] += 1
         self.format_dice_rolled()
 
     def roll_reset(self):
-        self.result['text'] = str(self.get_modifier())
+        self.result['text'] = str(self.modifier)
         self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.last_roll = list()
         self.format_dice_rolled()
 
     def re_roll(self):
-        self.result['text'] = str(self.get_modifier())
+        self.result['text'] = str(self.modifier)
         for i in range(len(self.last_roll)):
             dice = self.last_roll[i][0]
             if dice == 0:
@@ -368,14 +369,12 @@ class app:
         self.modifier_label.grid(row=0, column=0)
         self.modifier_entry.grid(row=1, column=0)
 
-        # amount of different dices rolled
-        self.dices_rolled.grid(row=1, column=1)
+        # amount of different dices rolled and total of the rolled dices
+        self.result_frame.grid(row=1, column=1, rowspan=2)
+        self.dices_rolled.grid(row=0, column=0)
         self.dices_rolled.configure(width=45)
-
-        # total of the rolled dices
-        self.result_frame.grid(row=2, column=1)
-        self.result_label.grid(row=0, column=0)
-        self.result.grid(row=1, column=0)
+        self.result_label.grid(row=1, column=0)
+        self.result.grid(row=2, column=0)
 
         # adding buttons for rolling dices
         for image, command in (
