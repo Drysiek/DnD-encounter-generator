@@ -13,7 +13,7 @@ from EncounterGenerator import Generator
 class app:
     def __init__(self):
         self.window = Tk()
-        self.window.title('Welcome to D&D encounter generator')
+        self.window.title('D&D Encounter Generator')
 
         self.create_menu()
 
@@ -27,7 +27,7 @@ class app:
 
         self.dices = tk.Frame(self.window)          # frame for rolling dices
         self.dices_rolled = tk.Label(self.dices, text='')
-        self.dices_rolled_array = [0, 0, 0, 0, 0, 0]
+        self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.result = tk.Label(self.dices, text='0')
         self.dices_images = []
         self.dice_buttons = []
@@ -60,43 +60,49 @@ class app:
                                     'Encounter text could not have been saved\nPlease chose file to save encounters')
                 break
 
-    def change_dices_black(self):
+    def change_dices_to_black(self):
         self.dices_images.clear()
         for image, i in (
-                ('images/black/d4.gif', 0),
-                ('images/black/d6.gif', 1),
-                ('images/black/d8.gif', 2),
-                ('images/black/d10.gif', 3),
-                ('images/black/d12.gif', 4),
-                ('images/black/d20.gif', 5)):
+                ('images/black/d2.gif', 0),
+                ('images/black/d4.gif', 1),
+                ('images/black/d6.gif', 2),
+                ('images/black/d8.gif', 3),
+                ('images/black/d10.gif', 4),
+                ('images/black/d12.gif', 5),
+                ('images/black/d20.gif', 6),
+                ('images/black/d100.gif', 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dices_images.append(image)
             self.dice_buttons[i].configure(image=self.dices_images[i])
 
-    def change_dices_crystal(self):
+    def change_dices_to_crystal(self):
         self.dices_images.clear()
         for image, i in (
-                ('images/crystal/d4.gif', 0),
-                ('images/crystal/d6.gif', 1),
-                ('images/crystal/d8.gif', 2),
-                ('images/crystal/d10.gif', 3),
-                ('images/crystal/d12.gif', 4),
-                ('images/crystal/d20.gif', 5)):
+                ('images/crystal/d2.gif', 0),
+                ('images/crystal/d4.gif', 1),
+                ('images/crystal/d6.gif', 2),
+                ('images/crystal/d8.gif', 3),
+                ('images/crystal/d10.gif', 4),
+                ('images/crystal/d12.gif', 5),
+                ('images/crystal/d20.gif', 6),
+                ('images/crystal/d100.gif', 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dices_images.append(image)
             self.dice_buttons[i].configure(image=self.dices_images[i])
 
-    def change_dices_metal(self):
+    def change_dices_to_metal(self):
         self.dices_images.clear()
         for image, i in (
-                ('images/metal/d4.gif', 0),
-                ('images/metal/d6.gif', 1),
-                ('images/metal/d8.gif', 2),
-                ('images/metal/d10.gif', 3),
-                ('images/metal/d12.gif', 4),
-                ('images/metal/d20.gif', 5)):
+                ('images/metal/d2.gif', 0),
+                ('images/metal/d4.gif', 1),
+                ('images/metal/d6.gif', 2),
+                ('images/metal/d8.gif', 3),
+                ('images/metal/d10.gif', 4),
+                ('images/metal/d12.gif', 5),
+                ('images/metal/d20.gif', 6),
+                ('images/metal/d100.gif', 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dices_images.append(image)
@@ -108,9 +114,9 @@ class app:
         file_menu = tkinter.Menu(menubar)
         for label, command, shortcut_text, shortcut in (
                 ("New file to encounters", self.file_new, "Ctrl+N", "<Control-n>"),
-                ("Change dice set to black", self.change_dices_black, "Ctrl+B", "<Control-b>"),
-                ("Change dice set to crystal", self.change_dices_crystal, "Ctrl+K", "<Control-k>"),
-                ("Change dice set to metal", self.change_dices_metal, "Ctrl+M", "<Control-m>")):
+                ("Change dice set to black", self.change_dices_to_black, "Ctrl+B", "<Control-b>"),
+                ("Change dice set to crystal", self.change_dices_to_crystal, "Ctrl+K", "<Control-k>"),
+                ("Change dice set to metal", self.change_dices_to_metal, "Ctrl+M", "<Control-m>")):
             file_menu.add_command(label=label, underline=0, command=command, accelerator=shortcut_text)
             self.window.bind(shortcut, command)
         menubar.add_cascade(label="File", menu=file_menu, underline=0)
@@ -180,93 +186,136 @@ class app:
 
         self.choices.grid(row=0, column=0, sticky=tkinter.NSEW)
 
+    def roll_d2(self):
+        self.result['text'] = str(int(self.result['text'])+random.randint(1, 2))
+        self.dices_rolled_array[0] += 1
+        self.format_dice_rolled()
+
     def roll_d4(self):
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 4))
-        self.dices_rolled_array[0] += 1
+        self.dices_rolled_array[1] += 1
         self.format_dice_rolled()
 
     def roll_d6(self):
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 6))
-        self.dices_rolled_array[1] += 1
+        self.dices_rolled_array[2] += 1
         self.format_dice_rolled()
 
     def roll_d8(self):
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 8))
-        self.dices_rolled_array[2] += 1
+        self.dices_rolled_array[3] += 1
         self.format_dice_rolled()
 
     def roll_d10(self):
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 10))
-        self.dices_rolled_array[3] += 1
+        self.dices_rolled_array[4] += 1
         self.format_dice_rolled()
 
     def roll_d12(self):
         self.result['text'] = str(int(self.result['text'])+random.randint(1, 12))
-        self.dices_rolled_array[4] += 1
+        self.dices_rolled_array[5] += 1
         self.format_dice_rolled()
 
     def roll_d20(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 20))
-        self.dices_rolled_array[5] += 1
+        self.result['text'] = str(int(self.result['text']) + random.randint(1, 20))
+        self.dices_rolled_array[6] += 1
+        self.format_dice_rolled()
+
+    def roll_d100(self):
+        self.result['text'] = str(int(self.result['text']) + random.randint(1, 100))
+        self.dices_rolled_array[7] += 1
         self.format_dice_rolled()
 
     def roll_reset(self):
         self.result['text'] = '0'
-        self.dices_rolled_array = [0, 0, 0, 0, 0, 0]
+        self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.format_dice_rolled()
+
+    def re_roll(self):
+        self.result['text'] = '0'
+        for i in range(self.dices_rolled_array[0]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 2))
+        for i in range(self.dices_rolled_array[1]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 4))
+        for i in range(self.dices_rolled_array[2]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 6))
+        for i in range(self.dices_rolled_array[3]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 8))
+        for i in range(self.dices_rolled_array[4]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 10))
+        for i in range(self.dices_rolled_array[5]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 12))
+        for i in range(self.dices_rolled_array[6]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 20))
+        for i in range(self.dices_rolled_array[7]):
+            self.result['text'] = str(int(self.result['text']) + random.randint(1, 100))
 
     def format_dice_rolled(self):
         self.dices_rolled['text'] = ''
-        if self.dices_rolled_array[0] > 0:  # formatting for d4s
-            self.dices_rolled['text'] += '{}d4'.format(self.dices_rolled_array[0])
+        if self.dices_rolled_array[0] > 0:  # formatting for d2s
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[0]}d2'
         if self.dices_rolled_array[1] > 0:  # formatting for d6s
             if self.dices_rolled['text'] != '':
                 self.dices_rolled['text'] += ' + '
-            self.dices_rolled['text'] += '{}d6'.format(self.dices_rolled_array[1])
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[1]}d4'
         if self.dices_rolled_array[2] > 0:  # formatting for d8s
             if self.dices_rolled['text'] != '':
                 self.dices_rolled['text'] += ' + '
-            self.dices_rolled['text'] += '{}d8'.format(self.dices_rolled_array[2])
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[2]}d6'
         if self.dices_rolled_array[3] > 0:  # formatting for d10s
             if self.dices_rolled['text'] != '':
                 self.dices_rolled['text'] += ' + '
-            self.dices_rolled['text'] += '{}d10'.format(self.dices_rolled_array[3])
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[3]}d8'
         if self.dices_rolled_array[4] > 0:  # formatting for d12s
             if self.dices_rolled['text'] != '':
                 self.dices_rolled['text'] += ' + '
-            self.dices_rolled['text'] += '{}d12'.format(self.dices_rolled_array[4])
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[4]}d10'
         if self.dices_rolled_array[5] > 0:  # formatting for d20s
             if self.dices_rolled['text'] != '':
                 self.dices_rolled['text'] += ' + '
-            self.dices_rolled['text'] += '{}d20'.format(self.dices_rolled_array[5])
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[5]}d12'
+        if self.dices_rolled_array[6] > 0:  # formatting for d12s
+            if self.dices_rolled['text'] != '':
+                self.dices_rolled['text'] += ' + '
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[6]}d20'
+        if self.dices_rolled_array[7] > 0:  # formatting for d100s
+            if self.dices_rolled['text'] != '':
+                self.dices_rolled['text'] += ' + '
+            self.dices_rolled['text'] += f'{self.dices_rolled_array[7]}d100'
 
     def add_dices(self):
         # amount of different dices rolled
         self.dices_rolled.grid(row=1, column=1)
-        self.dices_rolled.configure(width=40)
+        self.dices_rolled.configure(width=45)
 
         # total of the rolled dices
         self.result.grid(row=2, column=1)
 
         # adding buttons for rolling dices
         for image, command in (
+                ('images/black/d2.gif', self.roll_d2),
                 ('images/black/d4.gif', self.roll_d4),
                 ('images/black/d6.gif', self.roll_d6),
                 ('images/black/d8.gif', self.roll_d8),
                 ('images/black/d10.gif', self.roll_d10),
                 ('images/black/d12.gif', self.roll_d12),
-                ('images/black/d20.gif', self.roll_d20)):
+                ('images/black/d20.gif', self.roll_d20),
+                ('images/black/d100.gif', self.roll_d100)):
             image = os.path.join(os.path.dirname(__file__), image)
             try:
                 image = tkinter.PhotoImage(file=image)
                 self.dices_images.append(image)
                 self.dice_buttons.append(tk.Button(self.dices, image=image, command=command))
-                self.dice_buttons[len(self.dices_images) - 1].grid(column=0, row=len(self.dices_images) - 1)
+                self.dice_buttons[len(self.dices_images) - 1].grid(column=int(int(len(self.dices_images) - 1)/4)*2,
+                                                                   row=(len(self.dices_images) - 1) % 4)
             except tkinter.TclError as err:
                 print(err)
 
             button = tk.Button(self.dices, command=self.roll_reset, text='Reset rolls')
             button.grid(row=3, column=1)
+
+            button = tk.Button(self.dices, command=self.re_roll, text='Re roll dices')
+            button.grid(row=4, column=1)
 
         self.dices.grid(row=0, column=1, sticky=tkinter.NSEW)
 
@@ -275,12 +324,16 @@ class app:
         self.encounter_place.insert(1.0, self.encounter_text)
 
     def save_to_file(self):
-        if self.log_path == '':
-            self.file_new()
+        if self.encounter_text != 'Here will be written the generated encounter':
+            if self.log_path == '':
+                self.file_new()
 
-        if self.log_path != '':
-            self.log_path.write(f'{self.encounter_place.get("1.0",END)}\n')
-            self.log_path.write('-----------------------------\n')
+            if self.log_path != '':
+                self.log_path.write(f'{self.encounter_place.get("1.0",END)}\n')
+                self.log_path.write('-----------------------------\n')
+        else:
+            messagebox.showinfo('No encounter loaded yet',
+                                'Please generate encounter before saving it to the file')
 
     def add_encounter(self):
         # place for random encounter text
