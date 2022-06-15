@@ -26,9 +26,17 @@ class app:
         self.add_choices()
 
         self.dices = tk.Frame(self.window)          # frame for rolling dices
+        self.modifier_frame = tk.Frame(self.dices)
+        self.modifier_label = tk.Label(self.modifier_frame, text='Roll modifier:')
+        self.modifier_entry = tk.Entry(self.modifier_frame)
         self.dices_rolled = tk.Label(self.dices, text='')
         self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
-        self.result = tk.Label(self.dices, text='0')
+        self.last_roll = list()
+
+        self.result_frame = tk.Frame(self.dices)
+        self.result_label = tk.Label(self.result_frame, text='Rolled value:')
+
+        self.result = tk.Label(self.result_frame, text='0')
         self.dices_images = []
         self.dice_buttons = []
         self.add_dices()
@@ -37,7 +45,7 @@ class app:
 
         self.encounter = tk.Frame(self.window)      # frame for encounter text and buttons for managing it
         self.encounter_place = tk.Text(self.encounter)
-        self.encounter_text = ''
+        self.encounter_text = 'Here will be written the generated encounter'
         self.add_encounter()
 
         self.encounters = Generator()
@@ -187,48 +195,65 @@ class app:
         self.choices.grid(row=0, column=0, sticky=tkinter.NSEW)
 
     def roll_d2(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 2))
+        rolled = random.randint(1, 2)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((0, rolled))
         self.dices_rolled_array[0] += 1
         self.format_dice_rolled()
 
     def roll_d4(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 4))
+        rolled = random.randint(1, 4)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((1, rolled))
         self.dices_rolled_array[1] += 1
         self.format_dice_rolled()
 
     def roll_d6(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 6))
+        rolled = random.randint(1, 6)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((2, rolled))
         self.dices_rolled_array[2] += 1
         self.format_dice_rolled()
 
     def roll_d8(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 8))
+        rolled = random.randint(1, 8)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((3, rolled))
         self.dices_rolled_array[3] += 1
         self.format_dice_rolled()
 
     def roll_d10(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 10))
+        rolled = random.randint(1, 10)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((4, rolled))
         self.dices_rolled_array[4] += 1
         self.format_dice_rolled()
 
     def roll_d12(self):
-        self.result['text'] = str(int(self.result['text'])+random.randint(1, 12))
+        rolled = random.randint(1, 12)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((5, rolled))
         self.dices_rolled_array[5] += 1
         self.format_dice_rolled()
 
     def roll_d20(self):
-        self.result['text'] = str(int(self.result['text']) + random.randint(1, 20))
+        rolled = random.randint(1, 20)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((6, rolled))
         self.dices_rolled_array[6] += 1
         self.format_dice_rolled()
 
     def roll_d100(self):
-        self.result['text'] = str(int(self.result['text']) + random.randint(1, 100))
+        rolled = random.randint(1, 100)
+        self.result['text'] = str(int(self.result['text']) + rolled)
+        self.last_roll.append((7, rolled))
         self.dices_rolled_array[7] += 1
         self.format_dice_rolled()
 
     def roll_reset(self):
         self.result['text'] = '0'
         self.dices_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.last_roll = list()
         self.format_dice_rolled()
 
     def re_roll(self):
@@ -249,6 +274,16 @@ class app:
             self.result['text'] = str(int(self.result['text']) + random.randint(1, 20))
         for i in range(self.dices_rolled_array[7]):
             self.result['text'] = str(int(self.result['text']) + random.randint(1, 100))
+
+    def unroll_last_roll(self):
+        if len(self.last_roll) > 0:
+            self.dices_rolled_array[self.last_roll[len(self.last_roll)-1][0]] -= 1
+            self.result['text'] = str(int(self.result['text']) - self.last_roll[len(self.last_roll)-1][1])
+            self.last_roll.pop()
+            self.format_dice_rolled()
+        else:
+            messagebox.showinfo('No previous dice rolled',
+                                'Program can\'t unroll any more dice')
 
     def format_dice_rolled(self):
         self.dices_rolled['text'] = ''
@@ -284,12 +319,19 @@ class app:
             self.dices_rolled['text'] += f'{self.dices_rolled_array[7]}d100'
 
     def add_dices(self):
+        # place for roll modifier
+        self.modifier_frame.grid(row=0, column=1)
+        self.modifier_label.grid(row=0, column=0)
+        self.modifier_entry.grid(row=1, column=0)
+
         # amount of different dices rolled
         self.dices_rolled.grid(row=1, column=1)
         self.dices_rolled.configure(width=45)
 
         # total of the rolled dices
-        self.result.grid(row=2, column=1)
+        self.result_frame.grid(row=2, column=1)
+        self.result_label.grid(row=0, column=0)
+        self.result.grid(row=1, column=0)
 
         # adding buttons for rolling dices
         for image, command in (
@@ -317,6 +359,9 @@ class app:
             button = tk.Button(self.dices, command=self.re_roll, text='Re roll dices')
             button.grid(row=4, column=1)
 
+            button = tk.Button(self.dices, command=self.unroll_last_roll, text='Unroll the last roll')
+            button.grid(row=5, column=1)
+
         self.dices.grid(row=0, column=1, sticky=tkinter.NSEW)
 
     def show_original(self):
@@ -324,12 +369,13 @@ class app:
         self.encounter_place.insert(1.0, self.encounter_text)
 
     def save_to_file(self):
-        if self.encounter_text != 'Here will be written the generated encounter':
+        if self.encounter_place.get("1.0", END) != 'Here will be written the generated encounter':
+            print(self.encounter_place.get("1.0", END))
             if self.log_path == '':
                 self.file_new()
 
             if self.log_path != '':
-                self.log_path.write(f'{self.encounter_place.get("1.0",END)}\n')
+                self.log_path.write(f'{self.encounter_place.get("1.0", END)}\n')
                 self.log_path.write('-----------------------------\n')
         else:
             messagebox.showinfo('No encounter loaded yet',
@@ -339,6 +385,7 @@ class app:
         # place for random encounter text
         self.encounter_place.grid(row=0, column=0, rowspan=2)
         self.encounter_place.configure(height=10, width=70)
+        self.encounter_place.insert(1.0, 'Here will be written the generated encounter')
 
         button = tk.Button(self.encounter, command=self.show_original, text='Show original encounter')
         button.grid(row=0, column=1)
