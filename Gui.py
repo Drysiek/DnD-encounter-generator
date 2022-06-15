@@ -5,7 +5,6 @@ from tkinter import messagebox, filedialog
 import tkinter as tk
 import random
 from EncounterGenerator import Generator
-# from tkinter import messagebox, filedialog
 # from Controller import Controller
 # from configparser import ConfigParser
 
@@ -63,7 +62,6 @@ class app:
                 answer = filedialog.askopenfilename(parent=self.window, initialdir=os.getcwd(),
                                                     title="Choose a file to save your encounters:",
                                                     filetypes=my_filetypes)
-                print(answer)
                 self.log_path = open(answer, 'a')
                 break
             except FileNotFoundError:
@@ -216,23 +214,6 @@ class app:
         else:
             messagebox.showinfo('Written modifier is improper',
                                 'Please write modifier that is a number')
-
-    # def get_modifier(self):
-    #     entry = self.modifier_entry.get()
-    #     if entry.isnumeric() or entry == '' or (entry[0] == '-' and entry[1:].isnumeric()):
-    #         new_modifier = 0
-    #         if entry != '':
-    #             new_modifier = int(entry)
-    #         if self.modifier != new_modifier:
-    #             difference = new_modifier - self.modifier
-    #             self.modifier = new_modifier
-    #             return new_modifier
-    #         else:
-    #             return self.modifier
-    #     else:
-    #         messagebox.showinfo('Written modifier is improper',
-    #                             'Please write modifier that is a number')
-    #         return self.modifier
 
     def roll_d2(self):
         rolled = random.randint(1, 2)
@@ -415,17 +396,13 @@ class app:
         self.encounter_place.insert(1.0, self.encounter_text)
 
     def save_to_file(self):
-        if self.encounter_place.get("1.0", END) != 'Here will be written the generated encounter':
-            print(self.encounter_place.get("1.0", END))
-            if self.log_path == '':
-                self.file_new(None)
+        if self.log_path == '':
+            self.file_new(None)
 
-            if self.log_path != '':
-                self.log_path.write(f'{self.encounter_place.get("1.0", END)}\n')
-                self.log_path.write('-----------------------------\n')
-        else:
-            messagebox.showinfo('No encounter loaded yet',
-                                'Please generate encounter before saving it to the file')
+        if self.log_path != '':
+            print('doszlo')
+            self.log_path.write(f'{self.encounter_place.get("1.0", END)}\n')
+            self.log_path.write('-----------------------------\n')
 
     def add_encounter(self):
         # place for random encounter text
