@@ -6,8 +6,6 @@ import tkinter as tk
 import random
 from EncounterGenerator import Generator
 import tkinter.font as tkf
-# from Controller import Controller
-# from configparser import ConfigParser
 
 
 class app:
@@ -49,7 +47,7 @@ class app:
         self.log_file = ''
 
         self.encounter = tk.Frame(self.window)      # frame for encounter text and buttons for managing it
-        self.encounter_place = tk.Text(self.encounter)
+        self.encounter_place = tk.Text(self.encounter, wrap=tk.WORD)
         self.encounter_text = 'Here will be written the generated encounter'
         self.add_encounter()
 

@@ -5,7 +5,7 @@ import random
 class Generator:
     def __init__(self):
         # get hunting data
-        df = pd.read_csv('Hunting.csv', sep=';')
+        df = pd.read_csv('data/Hunting.csv', sep=';')
         self.hunt = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
@@ -16,7 +16,7 @@ class Generator:
         # print(set(self.hunt))
 
         # get gathering data
-        df = pd.read_csv('Ingredients.csv', sep=';', encoding="cp1250")
+        df = pd.read_csv('data/Ingredients.csv', sep=';', encoding="cp1250")
         self.gather = dict()
         for i in range(len(df)):
             place = df['Location'][i].split(', ')
@@ -28,7 +28,7 @@ class Generator:
         # print(set(self.gather))
 
         # get NPC data
-        df = pd.read_csv('NPC.csv', sep=';')
+        df = pd.read_csv('data/NPC.csv', sep=';')
         self.npc = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
@@ -39,7 +39,7 @@ class Generator:
         # print(set(self.npc))
 
         # # get fight data
-        df = pd.read_csv('Combat.csv', sep=';', encoding="cp1250")
+        df = pd.read_csv('data/Combat.csv', sep=';', encoding="cp1250")
         self.fight = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
