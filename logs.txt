@@ -13,3 +13,6 @@ Here will be written the generated encounter
 A moderate perception check spots over a dozen (3d4 +9) ice mephits sleeping in the snow. The party can attempt a skill challenge to avoid the mephits. On a failure, the mephits attack (groups of 4 in initiative, half of them arrive in the second round). On a success, the party makes it through the maze of mephits.
 
 -----------------------------
+Here will be written the generated encounter
+
+-----------------------------

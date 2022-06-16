@@ -397,15 +397,16 @@ class app:
 
     def save_to_file(self):
         if str(self.encounter_place.get("1.0", END)) == 'Here will be written the generated encounter':
-            print('jest zgodne')
-        if self.log_path == '':
-            self.file_new(None)
+            if self.log_path == '':
+                self.file_new(None)
 
-        if self.log_path != '':
-            self.log_file = open(self.log_path, 'a')
-            self.log_file.write(self.encounter_place.get("1.0", END))
-            self.log_file.write('\n-----------------------------\n')
-            self.log_file.close()
+            if self.log_path != '':
+                self.log_file = open(self.log_path, 'a')
+                self.log_file.write(self.encounter_place.get("1.0", END))
+                self.log_file.write('\n-----------------------------\n')
+                self.log_file.close()
+        else:
+            messagebox.showinfo('No encounter generated', 'Generate an encounter or write something on your own')
 
     def add_encounter(self):
         # place for random encounter text
