@@ -5,6 +5,7 @@ from tkinter import messagebox, filedialog
 import tkinter as tk
 import random
 from EncounterGenerator import Generator
+import tkinter.font as tkf
 # from Controller import Controller
 # from configparser import ConfigParser
 
@@ -13,6 +14,7 @@ class app:
     def __init__(self):
         self.window = Tk()
         self.window.title('D&D Encounter Generator')
+        self.window.iconphoto(False, PhotoImage(file='images/icon.ico'))
 
         self.create_menu()
 
@@ -411,7 +413,8 @@ class app:
     def add_encounter(self):
         # place for random encounter text
         self.encounter_place.grid(row=0, column=0, rowspan=2)
-        self.encounter_place.configure(height=10, width=70)
+        self.encounter_place.configure(height=10, width=70, font=tkf.Font(family="Arial", size=12, weight="bold",
+                                                                          slant="italic"))
         self.encounter_place.insert(1.0, 'Here will be written the generated encounter')
 
         button = tk.Button(self.encounter, command=self.show_original, text='Show original encounter')
