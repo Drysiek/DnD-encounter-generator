@@ -6,13 +6,26 @@ import tkinter as tk
 import random
 from EncounterGenerator import Generator
 import tkinter.font as tkf
+import os
+import sys
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class app:
     def __init__(self):
         self.window = Tk()
         self.window.title('D&D Encounter Generator')
-        self.window.iconphoto(False, PhotoImage(file='images/icon.ico'))
+        self.window.iconphoto(False, PhotoImage(file=resource_path('images/icon.ico')))
 
         self.create_menu()
 
@@ -73,14 +86,14 @@ class app:
     def change_dice_to_black(self, *args):
         self.dice_images.clear()
         for image, i in (
-                ('images/black/d2.gif', 0),
-                ('images/black/d4.gif', 1),
-                ('images/black/d6.gif', 2),
-                ('images/black/d8.gif', 3),
-                ('images/black/d10.gif', 4),
-                ('images/black/d12.gif', 5),
-                ('images/black/d20.gif', 6),
-                ('images/black/d100.gif', 7)):
+                (resource_path('images/black/d2.gif'), 0),
+                (resource_path('images/black/d4.gif'), 1),
+                (resource_path('images/black/d6.gif'), 2),
+                (resource_path('images/black/d8.gif'), 3),
+                (resource_path('images/black/d10.gif'), 4),
+                (resource_path('images/black/d12.gif'), 5),
+                (resource_path('images/black/d20.gif'), 6),
+                (resource_path('images/black/d100.gif'), 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
@@ -89,14 +102,14 @@ class app:
     def change_dice_to_crystal(self, *args):
         self.dice_images.clear()
         for image, i in (
-                ('images/crystal/d2.gif', 0),
-                ('images/crystal/d4.gif', 1),
-                ('images/crystal/d6.gif', 2),
-                ('images/crystal/d8.gif', 3),
-                ('images/crystal/d10.gif', 4),
-                ('images/crystal/d12.gif', 5),
-                ('images/crystal/d20.gif', 6),
-                ('images/crystal/d100.gif', 7)):
+                (resource_path('images/crystal/d2.gif'), 0),
+                (resource_path('images/crystal/d4.gif'), 1),
+                (resource_path('images/crystal/d6.gif'), 2),
+                (resource_path('images/crystal/d8.gif'), 3),
+                (resource_path('images/crystal/d10.gif'), 4),
+                (resource_path('images/crystal/d12.gif'), 5),
+                (resource_path('images/crystal/d20.gif'), 6),
+                (resource_path('images/crystal/d100.gif'), 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
@@ -105,14 +118,14 @@ class app:
     def change_dice_to_metal(self, *args):
         self.dice_images.clear()
         for image, i in (
-                ('images/metal/d2.gif', 0),
-                ('images/metal/d4.gif', 1),
-                ('images/metal/d6.gif', 2),
-                ('images/metal/d8.gif', 3),
-                ('images/metal/d10.gif', 4),
-                ('images/metal/d12.gif', 5),
-                ('images/metal/d20.gif', 6),
-                ('images/metal/d100.gif', 7)):
+                (resource_path('images/metal/d2.gif'), 0),
+                (resource_path('images/metal/d4.gif'), 1),
+                (resource_path('images/metal/d6.gif'), 2),
+                (resource_path('images/metal/d8.gif'), 3),
+                (resource_path('images/metal/d10.gif'), 4),
+                (resource_path('images/metal/d12.gif'), 5),
+                (resource_path('images/metal/d20.gif'), 6),
+                (resource_path('images/metal/d100.gif'), 7)):
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
@@ -397,14 +410,14 @@ class app:
 
         # adding buttons for rolling dice
         for image, command in (
-                ('images/black/d2.gif', self.roll_d2),
-                ('images/black/d4.gif', self.roll_d4),
-                ('images/black/d6.gif', self.roll_d6),
-                ('images/black/d8.gif', self.roll_d8),
-                ('images/black/d10.gif', self.roll_d10),
-                ('images/black/d12.gif', self.roll_d12),
-                ('images/black/d20.gif', self.roll_d20),
-                ('images/black/d100.gif', self.roll_d100)):
+                (resource_path('images/black/d2.gif'), self.roll_d2),
+                (resource_path('images/black/d4.gif'), self.roll_d4),
+                (resource_path('images/black/d6.gif'), self.roll_d6),
+                (resource_path('images/black/d8.gif'), self.roll_d8),
+                (resource_path('images/black/d10.gif'), self.roll_d10),
+                (resource_path('images/black/d12.gif'), self.roll_d12),
+                (resource_path('images/black/d20.gif'), self.roll_d20),
+                (resource_path('images/black/d100.gif'), self.roll_d100)):
             image = os.path.join(os.path.dirname(__file__), image)
             try:
                 image = tkinter.PhotoImage(file=image)

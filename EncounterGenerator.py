@@ -1,11 +1,24 @@
 import pandas as pd
 import random
+import os
+import sys
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class Generator:
     def __init__(self):
         # get hunting data
-        df = pd.read_csv('data/Hunting.csv', sep=';')
+        df = pd.read_csv(resource_path('data/Hunting.csv'), sep=';')
         self.hunt = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
@@ -16,7 +29,7 @@ class Generator:
         # print(set(self.hunt))
 
         # get gathering data
-        df = pd.read_csv('data/Ingredients.csv', sep=';', encoding="cp1250")
+        df = pd.read_csv(resource_path('data/Ingredients.csv'), sep=';', encoding="cp1250")
         self.gather = dict()
         for i in range(len(df)):
             place = df['Location'][i].split(', ')
@@ -28,7 +41,7 @@ class Generator:
         # print(set(self.gather))
 
         # get NPC data
-        df = pd.read_csv('data/NPC.csv', sep=';')
+        df = pd.read_csv(resource_path('data/NPC.csv'), sep=';')
         self.npc = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
@@ -39,7 +52,7 @@ class Generator:
         # print(set(self.npc))
 
         # # get fight data
-        df = pd.read_csv('data/Combat.csv', sep=';', encoding="cp1250")
+        df = pd.read_csv(resource_path('data/Combat.csv'), sep=';', encoding="cp1250")
         self.fight = dict()
         for i in range(len(df)):
             place = df['Terrain'][i].split(', ')
