@@ -6,7 +6,6 @@ import tkinter as tk
 import random
 from EncounterGenerator import Generator
 import tkinter.font as tkf
-import os
 import sys
 
 
