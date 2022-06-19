@@ -131,7 +131,7 @@ class app:
             self.dice_buttons[i].configure(image=self.dice_images[i])
 
     @staticmethod
-    def help_dice(self, *args):
+    def help_dice(*args):
         messagebox.showinfo('How to operate use dice', 'Click dice that you want to use right amount of times, '
                                                        'don\'t worry if you press wrong die, or you press any die too '
                                                        'many times, you can unroll last rolled die.\n'
@@ -140,7 +140,7 @@ class app:
                                                        'When you are ready, you can clear dice result.')
 
     @staticmethod
-    def help_generate(self, *args):
+    def help_generate(*args):
         messagebox.showinfo('How to use encounter generator', 'Using panels at the left, chose the best suiting '
                                                               'options for your next encounter.\nYou can chose proper '
                                                               'location, season, part of the day, encounter type and '
@@ -149,7 +149,7 @@ class app:
                                                               'written in panel at the bottom')
 
     @staticmethod
-    def help_save(self, *args):
+    def help_save(*args):
         messagebox.showinfo('How to save generated encounter', 'After pressing "Save encounter to file" button, you '
                                                                'should be able to save encounter to file if you '
                                                                'have already generated, or written any encounter.\n'
@@ -182,7 +182,7 @@ class app:
                 ('How to operate use dice', self.help_dice, 'Ctrl+Shift+D', '<Control-D>'),
                 ('How to save generated encounter', self.help_save, 'Ctrl+Shift+S', '<Control-S>'),
                 ('How to use encounter generator', self.help_generate, 'Ctrl+Shift+G', '<Control-G>')):
-            help_menu.add_command(label=label, underline=0, command=command, accelerator=shortcut_text)
+            help_menu.add_command(label=label, underline=1, command=command, accelerator=shortcut_text)
             self.window.bind(shortcut, command)
         menubar.add_cascade(label='Help', menu=help_menu, underline=0)
 
