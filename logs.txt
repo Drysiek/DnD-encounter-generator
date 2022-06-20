@@ -16,3 +16,6 @@ A moderate perception check spots over a dozen (3d4 +9) ice mephits sleeping in 
 Here will be written the generated encounter
 
 -----------------------------
+Here will be written the generated encounterc
+
+-----------------------------

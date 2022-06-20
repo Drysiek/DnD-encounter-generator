@@ -10,6 +10,7 @@ import sys
 
 
 def resource_path(relative_path):
+    # function needed for auto-py-to-exe
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -22,21 +23,28 @@ def resource_path(relative_path):
 
 class app:
     def __init__(self):
+        # configuring everything needed for TK() to work
         self.window = Tk()
         self.window.title('D&D Encounter Generator')
         self.window.iconphoto(False, PhotoImage(file=resource_path('images/icon.ico')))
 
+        # creating menu for window
         self.create_menu()
 
+        # creating everything needed in choices frame
         self.choices = tk.Frame(self.window)        # frame for deciding type of encounter, season, party lvl, etc.
+        # string variables needed to get data from user
         self.place_variable = StringVar()
         self.season_variable = StringVar()
         self.day_variable = StringVar()
         self.type_variable = StringVar()
         self.level_variable = StringVar()
+        # choices frame configuration
         self.add_choices()
 
+        # creating everything needed in dice frame
         self.dice = tk.Frame(self.window)          # frame for rolling dice
+        # frame, entry, label and variable for dice result modifier
         self.modifier_frame = tk.Frame(self.dice)
         self.modifier_label = tk.Label(self.modifier_frame, text='Roll modifier:')
         self.modifier = 0
@@ -44,45 +52,52 @@ class app:
         self.modifier_string.set('0')
         self.modifier_string.trace_add('write', self.check_modifier)
         self.modifier_entry = tk.Entry(self.modifier_frame, textvariable=self.modifier_string)
+        # frame, labels and array for dice result
         self.result_frame = tk.Frame(self.dice)
         self.dice_rolled = tk.Label(self.result_frame, text='')
         self.dice_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.last_roll = list()
         self.result_label = tk.Label(self.result_frame, text='Rolled value:')
         self.result = tk.Label(self.result_frame, text='0')
+        # frame for buttons managing dice
         self.dice_management_button_frame = tk.Frame(self.dice)
+        # lists to store dice buttons and their images
         self.dice_images = []
         self.dice_buttons = []
+        # dice frame configuration
         self.add_dice()
 
+        # log path and file
         self.log_path = ''                          # path to file with logs
         self.log_file = ''
 
+        # creating everything needed in encounter text
         self.encounter = tk.Frame(self.window)      # frame for encounter text and buttons for managing it
         self.encounter_place = tk.Text(self.encounter, wrap=tk.WORD)
         self.encounter_text = 'Here will be written the generated encounter'
+        # text management frame configuration
         self.add_encounter()
 
+        # variable containing encounter generator class
         self.encounters = Generator()
 
         self.window.resizable(False, False)
         self.window.mainloop()
 
     def file_new(self, *args):
-        while True:
-            try:
-                my_filetypes = [('text files', '.txt')]
-                self.log_path = filedialog.askopenfilename(parent=self.window, initialdir=os.getcwd(),
-                                                           title='Choose a file to save your encounters:',
-                                                           filetypes=my_filetypes)
-                self.log_file = open(self.log_path, 'a')
-                break
-            except FileNotFoundError:
-                messagebox.showinfo('No destination file chosen',
-                                    'Encounter text could not have been saved\nPlease chose file to save encounters')
-                break
+        try:
+            # only .txt files
+            my_filetypes = [('text files', '.txt')]
+            self.log_path = filedialog.askopenfilename(parent=self.window, initialdir=os.getcwd(),
+                                                       title='Choose a file to save your encounters:',
+                                                       filetypes=my_filetypes)
+            self.log_file = open(self.log_path, 'a')
+        except FileNotFoundError:
+            messagebox.showinfo('No destination file chosen',
+                                'Encounter text could not have been saved\nPlease chose file to save encounters')
 
     def change_dice_to_black(self, *args):
+        # deleting old dice images
         self.dice_images.clear()
         for image, i in (
                 (resource_path('images/black/d2.gif'), 0),
@@ -93,12 +108,14 @@ class app:
                 (resource_path('images/black/d12.gif'), 5),
                 (resource_path('images/black/d20.gif'), 6),
                 (resource_path('images/black/d100.gif'), 7)):
+            # adding new dice images
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
             self.dice_buttons[i].configure(image=self.dice_images[i])
 
     def change_dice_to_crystal(self, *args):
+        # deleting old dice images
         self.dice_images.clear()
         for image, i in (
                 (resource_path('images/crystal/d2.gif'), 0),
@@ -109,12 +126,14 @@ class app:
                 (resource_path('images/crystal/d12.gif'), 5),
                 (resource_path('images/crystal/d20.gif'), 6),
                 (resource_path('images/crystal/d100.gif'), 7)):
+            # adding new dice images
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
             self.dice_buttons[i].configure(image=self.dice_images[i])
 
     def change_dice_to_metal(self, *args):
+        # deleting old dice images
         self.dice_images.clear()
         for image, i in (
                 (resource_path('images/metal/d2.gif'), 0),
@@ -125,6 +144,7 @@ class app:
                 (resource_path('images/metal/d12.gif'), 5),
                 (resource_path('images/metal/d20.gif'), 6),
                 (resource_path('images/metal/d100.gif'), 7)):
+            # adding new dice images
             image = os.path.join(os.path.dirname(__file__), image)
             image = tkinter.PhotoImage(file=image)
             self.dice_images.append(image)
@@ -163,11 +183,13 @@ class app:
         menubar = tkinter.Menu(self.window)
         self.window['menu'] = menubar
 
+        # file menu with log file options
         file_menu = tkinter.Menu(menubar)
         file_menu.add_command(label='New file to encounters', underline=0, command=self.file_new, accelerator='Ctrl+N')
         self.window.bind('<Control-n>', self.file_new)
         menubar.add_cascade(label='File', menu=file_menu, underline=0)
 
+        # dice menu with dice change options
         dice_menu = tkinter.Menu(menubar)
         for label, command, shortcut_text, shortcut in (
                 ('Change dice set to black', self.change_dice_to_black, 'Ctrl+B', '<Control-b>'),
@@ -177,6 +199,7 @@ class app:
             self.window.bind(shortcut, command)
         menubar.add_cascade(label='Dice', menu=dice_menu, underline=0)
 
+        # help menu containing information about dice, saving encounters to file and generating encounters
         help_menu = tkinter.Menu(menubar)
         for label, command, shortcut_text, shortcut in (
                 ('How to operate use dice', self.help_dice, 'Ctrl+Shift+D', '<Control-D>'),
@@ -187,6 +210,7 @@ class app:
         menubar.add_cascade(label='Help', menu=help_menu, underline=0)
 
     def load_encounter(self):
+        # encounter text get from class EncounterGenerator
         self.encounter_text = self.encounters.get_encounter(self.place_variable.get(), self.season_variable.get(),
                                                             self.day_variable.get(), self.type_variable.get(),
                                                             self.level_variable.get())
@@ -253,15 +277,20 @@ class app:
 
     def check_modifier(self, *args):
         entry = self.modifier_entry.get()
+        # new modifier is a number
         if entry.isnumeric() or entry == '' or (entry[0] == '-' and entry[1:].isnumeric()):
+            # subtract old modifier from dice sesult
             self.result['text'] = str(int(self.result['text']) - self.modifier)
+            # add new modifier to the result
             if entry == '':
                 self.modifier = 0
             else:
                 self.modifier = int(entry)
             self.result['text'] = str(int(self.result['text']) + self.modifier)
+        # new modifier has potential to become a negative number
         elif entry == '-':
             pass
+        # new modifier won't be a number
         else:
             messagebox.showinfo('Written modifier is improper',
                                 'Please write modifier that is a number')
@@ -323,13 +352,17 @@ class app:
         self.format_dice_rolled()
 
     def roll_reset(self):
+        # we start from the modifier value
         self.result['text'] = str(self.modifier)
+        # we clear result and rolled dice list
         self.dice_rolled_array = [0, 0, 0, 0, 0, 0, 0, 0]
         self.last_roll = list()
         self.format_dice_rolled()
 
     def re_roll(self):
-        self.result['text'] = str(self.modifier)
+        # we start from the modifier value
+        roll_result = self.modifier
+        # every remembered rolled die is rolled again
         for i in range(len(self.last_roll)):
             dice = self.last_roll[i][0]
             if dice == 0:
@@ -348,20 +381,25 @@ class app:
                 roll = random.randint(1, 20)
             else:
                 roll = random.randint(1, 100)
+            # the result text is changed
             self.last_roll[i] = (dice, roll)
-            self.result['text'] = str(int(self.result['text']) + roll)
+            roll_result += roll
+        self.result['text'] = str(roll_result)
 
     def unroll_last_roll(self):
+        # when there were any rolled dice
         if len(self.last_roll) > 0:
             self.dice_rolled_array[self.last_roll[len(self.last_roll)-1][0]] -= 1
             self.result['text'] = str(int(self.result['text']) - self.last_roll[len(self.last_roll)-1][1])
             self.last_roll.pop()
             self.format_dice_rolled()
+        # when there weren't any rolled dice
         else:
             messagebox.showinfo('No previous dice rolled',
                                 'Program can\'t unroll any more dice')
 
     def format_dice_rolled(self):
+        # basic text
         self.dice_rolled['text'] = ''
         if self.dice_rolled_array[0] > 0:  # formatting for d2s
             self.dice_rolled['text'] += f'{self.dice_rolled_array[0]}d2'
@@ -427,34 +465,42 @@ class app:
             except tkinter.TclError as err:
                 print(err)
 
-            self.dice_management_button_frame.grid(row=3, column=1)
+        # placing and managing buttons for managing dice rolls
+        self.dice_management_button_frame.grid(row=3, column=1)
 
-            button = tk.Button(self.dice_management_button_frame, command=self.roll_reset, text='Reset rolls')
-            button.grid(row=0, column=0)
+        button = tk.Button(self.dice_management_button_frame, command=self.roll_reset, text='Reset rolls')
+        button.grid(row=0, column=0)
 
-            button = tk.Button(self.dice_management_button_frame, command=self.re_roll, text='Re roll dice')
-            button.grid(row=1, column=0)
+        button = tk.Button(self.dice_management_button_frame, command=self.re_roll, text='Re roll dice')
+        button.grid(row=1, column=0)
 
-            button = tk.Button(self.dice_management_button_frame, command=self.unroll_last_roll,
-                               text='Unroll the last roll')
-            button.grid(row=2, column=0)
+        button = tk.Button(self.dice_management_button_frame, command=self.unroll_last_roll,
+                           text='Unroll the last roll')
+        button.grid(row=2, column=0)
 
         self.dice.grid(row=0, column=1, sticky=tkinter.NSEW)
 
     def show_original(self):
+        # clear modified encounter text
         self.encounter_place.delete(1.0, 'end')
+        # show original encounter text
         self.encounter_place.insert(1.0, self.encounter_text)
 
     def save_to_file(self):
+        # if encounter text is different from starting value
         if str(self.encounter_place.get('1.0', END)) != 'Here will be written the generated encounter\n':
             if self.log_path == '':
                 self.file_new(None)
 
             if self.log_path != '':
+                # file is opened
                 self.log_file = open(self.log_path, 'a')
+                # file is being written encounter text into
                 self.log_file.write(self.encounter_place.get('1.0', END))
                 self.log_file.write('\n-----------------------------\n')
+                # file is closed
                 self.log_file.close()
+        # if encounter text is different from starting value
         else:
             messagebox.showinfo('No encounter generated', 'Generate an encounter or write something on your own')
 
@@ -464,10 +510,10 @@ class app:
         self.encounter_place.configure(height=10, width=70, font=tkf.Font(family='Arial', size=12, slant='italic'))
         self.encounter_place.insert(1.0, 'Here will be written the generated encounter')
 
+        # buttons accountable for handling encounter text
         button = tk.Button(self.encounter, command=self.show_original, text='Show original encounter')
         button.grid(row=0, column=1)
         button.configure(width=20)
-
         button = tk.Button(self.encounter, command=self.save_to_file, text='Save encounter to file')
         button.grid(row=1, column=1)
         button.configure(width=20)

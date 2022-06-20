@@ -5,6 +5,7 @@ import sys
 
 
 def resource_path(relative_path):
+    # function needed for auto-py-to-exe
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -26,7 +27,6 @@ class Generator:
                 if self.hunt.get(j) is None:
                     self.hunt.update({j: list()})
                 self.hunt[j].append((df['Beast'][i], df['Size'][i], df['CR'][i]))
-        # print(set(self.hunt))
 
         # get gathering data
         df = pd.read_csv(resource_path('data/Ingredients.csv'), sep=';', encoding="cp1250")
@@ -38,7 +38,6 @@ class Generator:
                     self.gather.update({j: list()})
                 self.gather[j].append((df['Herbs/Ingredients'][i], df['Rarity'][i], df['Ability'][i],
                                        df['Description'][i], df['Type'][i]))
-        # print(set(self.gather))
 
         # get NPC data
         df = pd.read_csv(resource_path('data/NPC.csv'), sep=';')
@@ -49,7 +48,6 @@ class Generator:
                 if self.npc.get(j) is None:
                     self.npc.update({j: list()})
                 self.npc[j].append((df['Encounter'][i], df['Rarity'][i]))
-        # print(set(self.npc))
 
         # # get fight data
         df = pd.read_csv(resource_path('data/Combat.csv'), sep=';', encoding="cp1250")
@@ -60,11 +58,12 @@ class Generator:
                 if self.fight.get(j) is None:
                     self.fight.update({j: list()})
                 self.fight[j].append((df['Encounter'][i], df['Rarity'][i]))
-        # print(set(self.fight))
 
     def get_encounter(self, place, season, day, encounter_type, level):
+        # creating list of possible encounters
         meeting = list()
 
+        # handling 'Random' encounter type
         if encounter_type == 'Random':
             a = random.randint(1, 4)
             if a == 1:
