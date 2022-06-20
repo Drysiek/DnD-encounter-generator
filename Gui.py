@@ -21,7 +21,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-class app:
+class App:
     def __init__(self):
         # configuring everything needed for TK() to work
         self.window = Tk()
@@ -289,7 +289,8 @@ class app:
             self.result['text'] = str(int(self.result['text']) + self.modifier)
         # new modifier has potential to become a negative number
         elif entry == '-':
-            pass
+            self.result['text'] = str(int(self.result['text']) - self.modifier)
+            self.modifier = 0
         # new modifier won't be a number
         else:
             messagebox.showinfo('Written modifier is improper',
