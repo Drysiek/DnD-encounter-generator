@@ -462,7 +462,7 @@ class App:
                 self.dice_images.append(image)
                 self.dice_buttons.append(tk.Button(self.dice, image=image, command=command))
                 self.dice_buttons[len(self.dice_images) - 1].grid(column=int(int(len(self.dice_images) - 1)/4)*2,
-                                                                   row=(len(self.dice_images) - 1) % 4)
+                                                                  row=(len(self.dice_images) - 1) % 4)
             except tkinter.TclError as err:
                 print(err)
 
